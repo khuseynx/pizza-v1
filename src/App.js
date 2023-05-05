@@ -5,9 +5,19 @@ import Categories from "./sections/Categories";
 import Sort from "./sections/Sort";
 import PizzaBlock from "./sections/PizzaBlock";
 import "./scss/app.scss";
-import pizzas from "./assets/pizzas.json";
 
 function App() {
+  const [pizzas, setPizzas] = React.useState([]);
+
+  React.useEffect(() => {
+    fetch("https://6455553bf803f3457640a60f.mockapi.io/data")
+      .then((res) => res.json())
+      .then((array) => {
+        setPizzas(array);
+        console.log("array of my pizzas:", array);
+      });
+  }, []);
+
   return (
     <div className="wrapper">
       <Header />
