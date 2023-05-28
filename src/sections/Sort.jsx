@@ -1,18 +1,24 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {setSort} from '../redux/slices/filterSlice';
 
-function Sort( {value, clickOnSort} ) {
+const list = [
+  { name: 'популярности (по убыванию)', sortProperty: 'rating' },
+  { name: 'популярности (по возрастанию)', sortProperty: '-rating' },
+  { name: 'цене (по убыванию)', sortProperty: 'price' },
+  { name: 'цене (по возрастанию)', sortProperty: '-price' },
+  { name: 'алфавиту (по убыванию)', sortProperty: 'title' },
+  { name: 'алфавиту (по возрастанию)', sortProperty: '-title' },
+];
+
+function Sort() {
+  const dispatch = useDispatch();
+  const sort = useSelector((state) => state.filter.sort);
+
   const [open, setOpen] = React.useState(false);
-  const list = [
-    { name: 'популярности (по убыванию)', sortProperty: 'rating' },
-    { name: 'популярности (по возрастанию)', sortProperty: '-rating' },
-    { name: 'цене (по убыванию)', sortProperty: 'price' },
-    { name: 'цене (по возрастанию)', sortProperty: '-price' },
-    { name: 'алфавиту (по убыванию)', sortProperty: 'title' },
-    { name: 'алфавиту (по возрастанию)', sortProperty: '-title' },
-  ];
 
-  const onClickListItem = (i) => {
-    clickOnSort(i);
+  const onClickListItem = (obj) => {
+    dispatch(setSort(obj));
     setOpen(false);
   };
 
@@ -32,7 +38,7 @@ function Sort( {value, clickOnSort} ) {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={() => setOpen(!open)}>{value.name}</span>
+        <span onClick={() => setOpen(!open)}>{sort.name}</span>
       </div>
       {open && (
         <div className="sort__popup">
@@ -41,7 +47,7 @@ function Sort( {value, clickOnSort} ) {
               <li
                 key={i}
                 onClick={() => onClickListItem(obj)}
-                className={value.sortProperty === obj.sortProperty ? "active" : ""}
+                className={sort.sortProperty === obj.sortProperty ? "active" : ""}
               >
                 {obj.name}
               </li>
